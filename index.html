@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Ứng dụng Tính Toán</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        main {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .appFields {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <h1>Ứng dụng Tính Toán</h1>
+        <h2>Chọn loại ứng dụng:</h2>
+
+        <button id="luoiCuonTatBtn" onclick="toggleFields('luoiCuonTat')">Lưới cuộn - Tấm</button>
+        <button id="chuongBtn" onclick="toggleFields('chuong')">Chuồng</button>
+
+        <form id="appForm">
+            <!-- Các trường nhập liệu của Lưới cuộn - Tấm -->
+            <div id="luoiCuonTatFields" class="appFields">
+                <label>Rộng – Cao: <input type="text" id="a"></label>
+                <label>Dài: <input type="text" id="b"></label>
+                <label>Bước nan dọc: <input type="text" id="x"></label>
+                <label>Bước nan ngang: <input type="text" id="y"></label>
+                <label>Đơn giá VND: <input type="text" id="donGia"></label>
+                <label>Gia công Cửa – Viền: <input type="text" id="gc"></label>
+                <label>Số lượng: <input type="text" id="sl"></label>
+            </div>
+
+            <!-- Các trường nhập liệu của Chuồng -->
+            <div id="chuongFields" class="appFields">
+                <label>Dài: <input type="text" id="L"></label>
+                <label>Rộng: <input type="text" id="R"></label>
+                <label>Cao: <input type="text" id="H"></label>
+                <label>Số lượng chuồng: <input type="text" id="SLC"></label>
+                <label>Bước nan dọc tấm Hông 1: <input type="text" id="HLd1"></label>
+                <label>Bước Nan ngang tấm hông 1: <input type="text" id="HLn1"></label>
+                <label>Bước nan dọc tấm Hông 2: <input type="text" id="HLd2"></label>
+                <label>Bước Nan ngang tấm hông 2: <input type="text" id="HLn2"></label>
+                <label>Bước nan dọc: <input type="text" id="Nd"></label>
+                <label>Bước nan ngang: <input type="text" id="Nn"></label>
+                <label>Tiền gia Công VND: <input type="text" id="Gc"></label>
+                <label>Đơn giá/kg: <input type="text" id="T"></label>
+            </div>
+
+            <button type="button" onclick="calculate()">Tính toán</button>
+        </form>
+
+        <div id="result">
+            <!-- Hiển thị kết quả tính toán ở đây -->
+        </div>
+    </main>
+
+    <script>
+        function toggleFields(appType) {
+            var luoiCuonTatFields = document.getElementById('luoiCuonTatFields');
+            var chuongFields = document.getElementById('chuongFields');
+            var luoiCuonTatBtn = document.getElementById('luoiCuonTatBtn');
+            var chuongBtn = document.getElementById('chuongBtn');
+
+            if (appType === 'luoiCuonTat') {
+                luoiCuonTatFields.style.display = 'block';
+                chuongFields.style.display = 'none';
+                luoiCuonTatBtn.style.backgroundColor = '#4caf50';
+                chuongBtn.style.backgroundColor = '#45a049';
+            } else if (appType === 'chuong') {
+                luoiCuonTatFields.style.display = 'none';
+                chuongFields.style.display = 'block';
+                luoiCuonTatBtn.style.backgroundColor = '#45a049';
+                chuongBtn.style.backgroundColor = '#4caf50';
+            }
+        }
+
+        function calculate() {
+            var appType = document.getElementById('luoiCuonTatBtn').style.backgroundColor === 'rgb(76, 175, 80)' ? 'luoiCuonTat' : 'chuong';
+            var resultDiv = document.getElementById('result');
+
+            if (appType === 'luoiCuonTat') {
+                var a = parseFloat(document.getElementById('a').value);
+                var b = parseFloat(document.getElementById('b').value);
+                var x = parseFloat(document.getElementById('x').value);
+                var y = parseFloat(document.getElementById('y').value);
+                var donGia = parseFloat(document.getElementById('donGia').value);
+                var gc = parseFloat(document.getElementById('gc').value);
+                var sl = parseFloat(document.getElementById('sl').value);
+
+                var soNanDoc = (a / x) + 1;
+                var soNanNgang = (b / y) + 1;
+                var tongSoM = (soNanDoc * b) + (soNanNgang * a);
+
+                var trongLuong3mm = (tongSoM * 0.055 * sl).toFixed(2);
+                var trongLuong4mm = (tongSoM * 0.1 * sl).toFixed(2);
+                var trongLuong5mm = (tongSoM * 0.154 * sl).toFixed(2);
+
+                var thanhTien3mm = ((((tongSoM * 0.055) * donGia + gc) * sl)).toFixed(2);
+                var thanhTien4mm = ((((tongSoM * 0.1) * donGia + gc) * sl)).toFixed(2);
+                var thanhTien5mm = ((((tongSoM * 0.154) * donGia + gc) * sl)).toFixed(2);
+
+                resultDiv.innerHTML = `
+                    <p>Trọng lượng (kg):</p>
+                    <ul>
+                        <li>3mm: ${trongLuong3mm}</li>
+                        <li>4mm: ${trongLuong4mm}</li>
+                        <li>5mm: ${trongLuong5mm}</li>
+                    </ul>
+                    <p>Thành tiền (VND):</p>
+                    <ul>
+                        <li>3mm: ${thanhTien3mm}</li>
+                        <li>4mm: ${thanhTien4mm}</li>
+                        <li>5mm: ${thanhTien5mm}</li>
+                    </ul>
+                `;
+            } else if (appType === 'chuong') {
+                var L = parseFloat(document.getElementById('L').value);
+                var R = parseFloat(document.getElementById('R').value);
+                var H = parseFloat(document.getElementById('H').value);
+                var SLC = parseFloat(document.getElementById('SLC').value);
+                var HLd1 = parseFloat(document.getElementById('HLd1').value);
+                var HLn1 = parseFloat(document.getElementById('HLn1').value);
+                var HLd2 = parseFloat(document.getElementById('HLd2').value);
+                var HLn2 = parseFloat(document.getElementById('HLn2').value);
+                var Nd = parseFloat(document.getElementById('Nd').value);
+                var Nn = parseFloat(document.getElementById('Nn').value);
+                var Gc = parseFloat(document.getElementById('Gc').value);
+                var T = parseFloat(document.getElementById('T').value);
+
+                var m1 = ((H / HLd1 + 1) * L) + ((L / HLn1 + 1) * H);
+                var m2 = ((H / HLd2 + 1) * L) + ((L / HLn2 + 1) * H);
+                var m3 = ((R / Nd + 1) * L) + ((L / Nn + 1) * R);
+                var m4 = ((H / Nd + 1) * R) + ((R / Nn + 1) * H);
+                var m5 = ((H / Nd + 1) * R) + ((R / Nn + 1) * H);
+
+                var trongLuong3mm = ((m1 + m2 + m3 + m4 + m5) * 0.055 * SLC).toFixed(2);
+                var trongLuong4mm = ((m1 + m2 + m3 + m4 + m5) * 0.1 * SLC).toFixed(2);
+                var trongLuong5mm = ((m1 + m2 + m3 + m4 + m5) * 0.154 * SLC).toFixed(2);
+
+                var thanhTien3mm = (((m1 + m2 + m3 + m4 + m5) * 0.055 * SLC * T)).toFixed(2);
+                var thanhTien4mm = (((m1 + m2 + m3 + m4 + m5) * 0.1 * SLC * T)).toFixed(2);
+                var thanhTien5mm = (((m1 + m2 + m3 + m4 + m5) * 0.154 * SLC * T)).toFixed(2);
+
+                resultDiv.innerHTML = `
+                    <p>Trọng lượng (kg):</p>
+                    <ul>
+                        <li>3mm: ${trongLuong3mm}</li>
+                        <li>4mm: ${trongLuong4mm}</li>
+                        <li>5mm: ${trongLuong5mm}</li>
+                    </ul>
+                    <p>Thành tiền (VND):</p>
+                    <ul>
+                        <li>3mm: ${thanhTien3mm}</li>
+                        <li>4mm: ${thanhTien4mm}</li>
+                        <li>5mm: ${thanhTien5mm}</li>
+                    </ul>
+                `;
+            }
+        }
+    </script>
+
+</body>
+</html>
