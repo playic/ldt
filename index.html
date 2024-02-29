@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Ứng dụng Tính Toán</title>
+    <title>Tính Trongj</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,22 +15,59 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            height: 100%;
         }
 
         main {
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
-            width: 90%;
-            max-width: 400px;
+            min-width: 480px;
+            min-height: 100vh;
         }
 
-        h1, h2 {
-            color: #333;
-            text-align: center;
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color:  #009411;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 15px 16px;
+            transition: 0.3s;
+            width: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            color: #f1f1f1;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #35b900;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #56b300;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+        }
+
+        .tabcontent.active {
+            display: block !important;
         }
 
         form {
@@ -43,7 +80,7 @@
         }
 
         input, select {
-            width: calc(100% - 16px);
+            width: 100%;
             padding: 8px;
             margin-bottom: 10px;
             box-sizing: border-box;
@@ -51,58 +88,81 @@
             border-radius: 4px;
         }
 
-        button {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px 15px;
+        .btn-calculate{
+            background-color:  #009411;
+            float: left;
             border: none;
-            border-radius: 4px;
+            outline: none;
             cursor: pointer;
-            width: 100%;
-            display: inline-block;
-            margin-top: 10px;
+            padding: 15px 16px;
+            transition: 0.3s;
+            width: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            color: #f1f1f1;
         }
 
-        button:hover {
-            background-color: #45a049;
-        }
 
         #result {
-            margin-top: 20px;
+            width: 430px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0px;
             padding: 10px;
-            background-color: #f0f0f0;
+            background-color: #dbffb9;
             border-radius: 4px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
 
-        .appFields {
+        #result.hidden{
             display: none;
+        }
+        #result .btn-close{
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 80px;
+            height: 40px;
+            font-size: 14px;
+            position: absolute;
+            right: 10px;
+            border: 1px solid #ffabab;
+            border-radius: 5px;
+            background-color: #f5e2e2;
+        }
+
+        #result.display{
         }
     </style>
 </head>
 <body>
 
     <main>
-        <h1>Ứng dụng Tính Toán</h1>
-        <h2>Chọn loại ứng dụng:</h2>
 
-        <button id="luoiCuonTatBtn" onclick="toggleFields('luoiCuonTat')">Lưới cuộn - Tấm</button>
-        <button id="chuongBtn" onclick="toggleFields('chuong')">Chuồng</button>
+        <h2>Tính trọng luợng, giá thành</h2>
 
+        <div class="tab">
+            <button id="luoiCuonTatBtn" class="active"  onclick="toggleFields('luoiCuonTat')">Lưới cuộn - Tấm</button>
+            <button id="chuongBtn" class="tablinks"  onclick="toggleFields('chuong')">Chuồng</button>
+        </div>
+
+        
         <form id="appForm">
             <!-- Các trường nhập liệu của Lưới cuộn - Tấm -->
-            <div id="luoiCuonTatFields" class="appFields">
-                <label>Rộng – Cao: <input type="text" id="a"></label>
+            <div id="luoiCuonTatFields" class="tabcontent active" class="">
+                <label>Rộng - Cao: <input type="text" id="a"></label>
                 <label>Dài: <input type="text" id="b"></label>
                 <label>Bước nan dọc: <input type="text" id="x"></label>
                 <label>Bước nan ngang: <input type="text" id="y"></label>
                 <label>Đơn giá VND: <input type="text" id="donGia"></label>
-                <label>Gia công Cửa – Viền: <input type="text" id="gc"></label>
+                <label>Gia công Cửa - Viền: <input type="text" id="gc"></label>
                 <label>Số lượng: <input type="text" id="sl"></label>
             </div>
 
             <!-- Các trường nhập liệu của Chuồng -->
-            <div id="chuongFields" class="appFields">
+            <div id="chuongFields" class="tabcontent">
                 <label>Dài: <input type="text" id="L"></label>
                 <label>Rộng: <input type="text" id="R"></label>
                 <label>Cao: <input type="text" id="H"></label>
@@ -117,37 +177,49 @@
                 <label>Đơn giá/kg: <input type="text" id="T"></label>
             </div>
 
-            <button type="button" onclick="calculate()">Tính toán</button>
+            <button type="button" class="btn-calculate" onclick="calculate()">Tính toán</button>
         </form>
 
-        <div id="result">
-            <!-- Hiển thị kết quả tính toán ở đây -->
+        <div id="result" class="hidden">
+            <button type="button" class="btn-close" onclick="closeResult()">Đóng</button>
+            <h3>Kết quả</h3>
+            <div id="resultContent"> <!-- Hiển thị kết quả tính toán ở đây --> </div>
+            
         </div>
     </main>
 
     <script>
         function toggleFields(appType) {
+            closeResult();
             var luoiCuonTatFields = document.getElementById('luoiCuonTatFields');
             var chuongFields = document.getElementById('chuongFields');
             var luoiCuonTatBtn = document.getElementById('luoiCuonTatBtn');
             var chuongBtn = document.getElementById('chuongBtn');
 
             if (appType === 'luoiCuonTat') {
-                luoiCuonTatFields.style.display = 'block';
-                chuongFields.style.display = 'none';
-                luoiCuonTatBtn.style.backgroundColor = '#4caf50';
-                chuongBtn.style.backgroundColor = '#45a049';
+                chuongFields.className = 'tabcontent';
+                luoiCuonTatFields.className = 'tabcontent active';
+                chuongBtn.className = "inactive";
+                luoiCuonTatBtn.className = "active";
             } else if (appType === 'chuong') {
-                luoiCuonTatFields.style.display = 'none';
-                chuongFields.style.display = 'block';
-                luoiCuonTatBtn.style.backgroundColor = '#45a049';
-                chuongBtn.style.backgroundColor = '#4caf50';
+                chuongFields.className = 'tabcontent active';
+                luoiCuonTatFields.className = 'tabcontent';
+                chuongBtn.className = "active";
+                luoiCuonTatBtn.className = "inactive";
             }
         }
 
-        function calculate() {
-            var appType = document.getElementById('luoiCuonTatBtn').style.backgroundColor === 'rgb(76, 175, 80)' ? 'luoiCuonTat' : 'chuong';
+        function closeResult() {
             var resultDiv = document.getElementById('result');
+            resultDiv.className = "hidden";
+        }
+
+        function calculate() {
+            var resultDiv = document.getElementById('result');
+            resultDiv.className = "display";
+
+            var appType = document.getElementById('luoiCuonTatBtn').className === 'active' ? 'luoiCuonTat' : 'chuong';
+            var resultDiv = document.getElementById('resultContent');
 
             if (appType === 'luoiCuonTat') {
                 var a = parseFloat(document.getElementById('a').value);
